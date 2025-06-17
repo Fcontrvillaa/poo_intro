@@ -4,20 +4,20 @@ import os
 
 class Contacto:
     def __init__(self, nombre:str, email:str, telefono:str) -> None:
-        self.__nombre = nombre
-        self.__email = email
-        self.__telefono = telefono
+        self._nombre = nombre
+        self._email = email
+        self._telefono = telefono
 
 
     @property
     def nombre(self):
-        return self.__nombre
+        return self._nombre
     @property
     def email(self):
-        return self.__email
+        return self._email
     @property
     def telefono(self):
-        return self.__telefono
+        return self._telefono
     
 
     def __repr__(self):
@@ -31,17 +31,17 @@ class ContactoTrabajo(Contacto):
     def __init__(self, nombre, email, telefono, empresa, oficio):
         # constructor  de Contacto()
         super().__init__(nombre, email, telefono)
-        self.__empresa = empresa
-        self.__oficio = oficio
+        self._empresa = empresa
+        self._oficio = oficio
 
     
     @property
     def empresa(self):
-        return self.__empresa
+        return self._empresa
     
     @property
     def oficio(self):
-        return self.__oficio
+        return self._oficio
 
     def __repr__(self):
         return  repr([f"{self.nombre} , {self.email},{self.telefono} ,{self.empresa}, {self.oficio}"])
@@ -52,9 +52,8 @@ class ContactoTrabajo(Contacto):
 class Manejador:
 
     def __init__(self):
-        self.contactos:list[Contacto] = []
+        self.contactos:list[Contacto] = []     #manejador tendra una lista 'contacto'
 
-    
     
     def agregar_contacto(self, contacto:Contacto):
         self.contactos.append(contacto)
@@ -69,6 +68,13 @@ class Manejador:
                 return i
         return None
             
+    def actualizar_contacto(self, nombre, telefono , email):
+        c = self.buscar_contacto(nombre)
+        #if c:  #if true
+        c.__telefono = telefono
+        c.__email = email
+        return None
+
 
 
     def borrar_contacto(self,nombre):
@@ -105,12 +111,12 @@ class Consola_menu:
 
 class Pedir_datos:
 
-    @staticmethod
+    @staticmethod  #metodo estatico. podemos usar sin instanciar
     def contacto_normal():
         nombre = input("nombre :")
         email = input("email :")
         telefono = input("telefono :")
-        return Contacto(nombre, email, telefono)
+        return Contacto(nombre, email, telefono) #retorna instancia de contacto
     
     @staticmethod
     def contacto_empresa():
@@ -123,7 +129,7 @@ class Pedir_datos:
     
 
 class App:
-    def __init__(self):
+    def __init__(self):    #instanciando
         self.manejador = Manejador()
 
     def run(self):
@@ -151,21 +157,53 @@ class App:
                     for i in contactos:
                         print(i)
 
-            else:
-                print("sin contactos")
+                else:
+                    print("sin contactos")
+
+                
+            elif opcion == "4":
+                nombre = input("Nombre contacto : ")
+                c = self.manejador.buscar_contacto(nombre)
+                if c:
+                    print(c)
+                else:
+                    print("Contacto no entregado")
+
+
+            elif opcion == "5":
+                nombre = input("nombre a actualizar")
+                telefono = input("nuevo telefono")
+                email = input("nuevo email")
+                c = self.manejador.actualizar_contacto(nombre, telefono, email)
+                
+                print("contacto actualizado")
+
+
+            elif opcion == "6":
+                nombre = input("contacto a borrar")
+                c = self.manejador.borrar_contacto(nombre)
+                
+                print("contacto borrado")
+                
+            
+            elif opcion == "7":
+                
+                Consola_menu.limpiar_consola()
+                print("adios")
+                exit()   # 
+
+           
+
 
             input("enter para continuar")
 
 
-
-
-
-
-
-
 # instancia = Contacto("dsf","gftrh","345677")
 # variable = 10
-        
+
+
+app = App()
+app.run()       
    
 
 
